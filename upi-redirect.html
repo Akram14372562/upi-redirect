@@ -10,7 +10,7 @@
             let upiLink = params.get('upi') || params.get('url') || params.get('link');
             // Show manual fallback after 2 seconds
             setTimeout(() => {
-                document.getElementById("manual-payment").style.display = "block";
+                // document.getElementById("manual-payment").style.display = "block";
                 document.getElementById("upi-link-text").textContent = upiLink;
                 document.getElementById("upi-link-anchor").href = upiLink;
             }, 2000);
