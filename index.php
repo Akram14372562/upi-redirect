@@ -1,0 +1,9 @@
+<script>
+        function getFullUpiLink() {
+            const params = new URLSearchParams(window.location.search);
+            let upiLink = params.get('upi') || params.get('url') || params.get('link');
+            alert (upiLink);
+            return upiLink;
+        }
+				getFullUpiLink();
+</script>
