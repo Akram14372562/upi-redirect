@@ -1,10 +1,13 @@
 <div id="upiLinkDisplay"></div>
+<?php 
+$link = $_GET['upi'] ?? $_GET['url'] ?? $_GET['link'] ?? null;
 
+?>
 <script>
     function getFullUpiLink() {
         const params = new URLSearchParams(window.location.search);
         //let upiLink = params.get('upi') || params.get('url') || params.get('link');
-        let upiLink = "<?php echo urldecode($_GET['upi'] ?? $_GET['url'] ?? $_GET['link'] ?? null); ?>";
+        let upiLink = "<?php echo $link; ?>";
         
         document.getElementById('upiLinkDisplay').textContent = 
             upiLink ? 'UPI Link: ' + upiLink : 'No UPI link found in URL';
