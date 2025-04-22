@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment Redirect</title>
+    <script>
+        // Extract UPI link from URL query parameter
+        function getUpiLink() {
+            const params = new URLSearchParams(window.location.search);
+            const upiLink = params.get('upi') || params.get('url');
+            
+            if (!upiLink) {
+                document.getElementById("error").textContent = "No UPI link provided!";
+                return null;
+            }
+            
+            // Decode URI component (in case it was encoded)
+            return decodeURIComponent(upiLink);
+        }
+
+        // Try to redirect automatically
+        function redirectToUpi() {
+            const upiLink = getUpiLink();
+            if (!upiLink) return;
+
+            // Try to open UPI link (works on mobile if UPI app is installed)
+            window.location.href = upiLink;
+            
+            // Fallback instructions if redirect fails
+            setTimeout(() => {
+                document.getElementById("manual-payment").style.display = "block";
+            }, 2000);
+        }
+
+        // Copy UPI link to clipboard
+        function copyUpiLink() {
+            const upiLink = getUpiLink();
+            if (!upiLink) return;
+            
+            navigator.clipboard.writeText(upiLink)
+                .then(() => {
+                    alert("UPI link copied to clipboard!");
+                })
+                .catch(() => {
+                    prompt("Copy this UPI link manually:", upiLink);
+                });
+        }
+
+        // Run redirect on page load
+        window.onload = redirectToUpi;
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #manual-payment {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>UPI Payment</h1>
+    <p>Redirecting to your UPI app...</p>
+    
+    <div id="error"></div>
+    
+    <div id="manual-payment">
+        <h3>If automatic redirect fails:</h3>
+        <p>1. Click the button below to copy the UPI link</p>
+        <button onclick="copyUpiLink()">📋 Copy UPI Link</button>
+        <p>2. Open your UPI app (GPay, PhonePe, Paytm, etc.)</p>
+        <p>3. Paste the link and complete payment</p>
+    </div>
+</body>
+</html>
