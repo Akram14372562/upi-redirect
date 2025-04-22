@@ -1,9 +1,20 @@
 <script>
-        function getFullUpiLink() {
-            const params = new URLSearchParams(window.location.search);
-            let upiLink = params.get('upi') || params.get('url') || params.get('link');
-            alert (upiLink);
-            return upiLink;
-	}
-	getFullUpiLink();
+    function getFullUpiLink() {
+        const params = new URLSearchParams(window.location.search);
+        let upiLink = params.get('upi') || params.get('url') || params.get('link');
+        
+        // Create a paragraph element and display the UPI link
+        const displayElement = document.createElement('p');
+        displayElement.textContent = upiLink ? 'UPI Link: ' + upiLink : 'No UPI link found in URL';
+        
+        // Add some basic styling
+        displayElement.style.fontSize = '18px';
+        displayElement.style.margin = '20px';
+        
+        // Append to the body
+        document.body.appendChild(displayElement);
+        
+        return upiLink;
+    }
+    getFullUpiLink();
 </script>
