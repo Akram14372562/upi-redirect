@@ -5,47 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPI Payment Redirect</title>
     <script>
-        function getFullUpiLink() {
+        function getDecodedUpiLink() {
             const params = new URLSearchParams(window.location.search);
-            let upiLink = params.get('upi') || params.get('url') || params.get('link');
+            let upiParam = params.get('upi') || params.get('url') || params.get('link');
             
-            if (!upiLink) {
-                document.getElementById("error").textContent = "No UPI link provided in URL parameters!";
+            if (!upiParam) {
+                showError("No UPI link parameter found in URL");
                 return null;
             }
-            
-            // Decode the URI component
-            const upiLink = atob(upiLink);
-            
-            // Validate it's a UPI link
-            if (!upiLink.startsWith('upi://')) or (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('paytmp://')) {
-                document.getElementById("error").textContent = "Invalid UPI link format! Must start with upi://";
+
+            try {
+                // First try Base64 decoding
+                let upiLink = atob(upiParam);
+                
+                // If that fails (might be URL encoded), try decodeURIComponent
+                if (!upiLink.startsWith('upi://')) or (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('paytmp://')) {
+                    upiLink = decodeURIComponent(upiParam);
+                }
+                
+                // Validate UPI link format
+                if (!upiLink.startsWith('upi://')) {
+                    showError("Invalid UPI link format. Must start with upi://");
+                    return null;
+                }
+                
+                if (!upiLink.includes('pa=') || !upiLink.includes('@')) {
+                    showError("Incomplete UPI link. Missing payment address (pa)");
+                    return null;
+                }
+                
+                return upiLink;
+            } catch (e) {
+                showError("Failed to decode UPI link. Error: " + e.message);
                 return null;
             }
-            
-            // Ensure it has required parameters
-            if (!upiLink.includes('pa=') || !upiLink.includes('@')) {
-                document.getElementById("error").textContent = "Incomplete UPI link! Missing payment address (pa)";
-                return null;
-            }
-            
-            return upiLink;
+        }
+
+        function showError(message) {
+            document.getElementById("error").textContent = message;
         }
 
         function redirectToUpi() {
-            const upiLink = getFullUpiLink();
+            const upiLink = getDecodedUpiLink();
             if (!upiLink) return;
 
-            // First attempt - direct UPI link
+            // First attempt - direct UPI link (shows app chooser on Android)
             window.location.href = upiLink;
             
-            // Second attempt - Android intent after delay
-            setTimeout(() => {
-                const androidIntent = `intent://${upiLink.replace('upi://', '')}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`;
-                window.location.href = androidIntent;
-            }, 500);
-            
-            // Show manual fallback after 2 seconds
+            // Show manual fallback after 2 seconds if redirect fails
             setTimeout(() => {
                 document.getElementById("manual-payment").style.display = "block";
                 document.getElementById("upi-link-text").textContent = upiLink;
@@ -54,7 +61,7 @@
         }
 
         function copyUpiLink() {
-            const upiLink = getFullUpiLink();
+            const upiLink = getDecodedUpiLink();
             if (!upiLink) return;
             
             navigator.clipboard.writeText(upiLink)
@@ -120,22 +127,30 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        #error {
+            color: red;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            background: #ffeeee;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
     <h1>UPI Payment</h1>
     <div class="spinner"></div>
-    <p>Redirecting to UPI payment...</p>
+    <p>Opening payment app...</p>
     
-    <div id="error" style="color:red; font-weight:bold; margin:15px 0;"></div>
+    <div id="error"></div>
     
     <div id="manual-payment">
         <h3>If redirect didn't work:</h3>
-        <p>1. Tap this link: <a id="upi-link-anchor" href="#" style="color:#0066cc;">Open in UPI</a></p>
-        <p>Or copy this link:</p>
+        <p>1. Tap this link: <a id="upi-link-anchor" href="#" style="color:#0066cc;word-break:break-all;">Open Payment</a></p>
+        <p>Or copy this UPI link:</p>
         <div id="upi-link-text"></div>
         <button id="copy-btn" onclick="copyUpiLink()">📋 Copy UPI Link</button>
-        <p>2. Open your UPI app (GPay, PhonePe, Paytm, etc.)</p>
+        <p>2. Open any UPI app (GPay, PhonePe, Paytm, etc.)</p>
         <p>3. Paste the link to complete payment</p>
     </div>
 </body>
