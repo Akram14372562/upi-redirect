@@ -8,23 +8,17 @@
         function getFullUpiLink() {
             const params = new URLSearchParams(window.location.search);
             let upiLink = params.get('upi') || params.get('url') || params.get('link');
-            // Show manual fallback after 2 seconds
-            setTimeout(() => {
-                // document.getElementById("manual-payment").style.display = "block";
-                document.getElementById("upi-link-text").textContent = upiLink;
-                document.getElementById("upi-link-anchor").href = upiLink;
-            }, 2000);
-            die();
+            
             if (!upiLink) {
                 document.getElementById("error").textContent = "No UPI link provided in URL parameters!";
                 return null;
             }
             
             // Decode the URI component
-            upiLink = decodeURIComponent(upiLink);
+            const upiLink = atob(upiLink);
             
             // Validate it's a UPI link
-            if (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('upi://')){
+            if (!upiLink.startsWith('upi://')) or (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('paytmp://')) {
                 document.getElementById("error").textContent = "Invalid UPI link format! Must start with upi://";
                 return null;
             }
