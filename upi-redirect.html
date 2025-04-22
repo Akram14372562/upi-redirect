@@ -34,12 +34,12 @@
 			
             // Try to open UPI link directly
             window.location.href = upiLink;
-            /*
+            
             // Fallback: Try to open intent for Android
             setTimeout(() => {
                 window.location.href = `intent://${upiLink.replace(/^upi:\/\//, '')}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`;
             }, 300);
-            */
+            
             // Final fallback instructions
             setTimeout(() => {
                 document.getElementById("manual-payment").style.display = "block";
