@@ -39,13 +39,13 @@
             setTimeout(() => {
                 window.location.href = `intent://${upiLink.replace(/^upi:\/\//, '')}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`;
             }, 300);
-            
+            */
             // Final fallback instructions
             setTimeout(() => {
                 document.getElementById("manual-payment").style.display = "block";
                 document.getElementById("direct-link").href = upiLink;
                 document.getElementById("direct-link").textContent = upiLink;
-            }, 1500);*/
+            }, 1500);
         }
 
         // Copy UPI link to clipboard
