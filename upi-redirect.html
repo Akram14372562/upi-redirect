@@ -8,7 +8,8 @@
         // Extract UPI link from URL query parameter
         function getUpiLink() {
             const params = new URLSearchParams(window.location.search);
-            const upiLink = params.get('upi') || params.get('url') || params.get('link');
+            #const upiLink = params.get('upi') || params.get('url') || params.get('link');
+            const upiLink = "<?php echo $_REQUEST["url"]; ?>";
             alert (upiLink);
             if (!upiLink) {
                 document.getElementById("error").textContent = "No UPI link provided! Please check the URL.";
