@@ -9,7 +9,7 @@
         function getUpiLink() {
             const params = new URLSearchParams(window.location.search);
             #const upiLink = params.get('upi') || params.get('url') || params.get('link');
-            const upiLink = "<?php echo $_REQUEST["url"]; ?>";
+            const upiLink = "<?php echo $_REQUEST['url']; ?>";
             alert (upiLink);
             if (!upiLink) {
                 document.getElementById("error").textContent = "No UPI link provided! Please check the URL.";
@@ -29,11 +29,12 @@
         // Try to redirect automatically
         function redirectToUpi() {
             const upiLink = getUpiLink();
+            
             if (!upiLink) return;
-
+			
             // Try to open UPI link directly
             window.location.href = upiLink;
-            
+            /*
             // Fallback: Try to open intent for Android
             setTimeout(() => {
                 window.location.href = `intent://${upiLink.replace(/^upi:\/\//, '')}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`;
@@ -44,7 +45,7 @@
                 document.getElementById("manual-payment").style.display = "block";
                 document.getElementById("direct-link").href = upiLink;
                 document.getElementById("direct-link").textContent = upiLink;
-            }, 1500);
+            }, 1500);*/
         }
 
         // Copy UPI link to clipboard
