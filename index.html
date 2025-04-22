@@ -3,6 +3,7 @@
 echo $link = $_GET['upi'] ?? $_GET['url'] ?? $_GET['link'] ?? null;
 
 ?>
+<div id="upiLinkDisplay1"><?php echo urldecode($link); ?></div>
 <script>
     function getFullUpiLink() {
         const params = new URLSearchParams(window.location.search);
