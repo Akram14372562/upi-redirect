@@ -17,7 +17,7 @@
             
             // Decode URI component and validate it's a UPI link
             const decodedLink = decodeURIComponent(upiLink);
-            if (!decodedLink.startsWith('upi://') && !decodedLink.startsWith('tez://')) {
+            if (!decodedLink.startsWith('upi://') && !decodedLink.startsWith('phonepe://')) {
                 document.getElementById("error").textContent = "Invalid UPI link format!";
                 return null;
             }
