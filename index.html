@@ -1,19 +1,48 @@
-<div id="upiLinkDisplay"></div>
-<?php 
-$link = isset($_GET['upi']) ? $_GET['upi'] : (isset($_GET['url']) ? $_GET['url'] : (isset($_GET['link']) ? $_GET['link'] : null));
-if ($link) {
-    $link = urldecode($link);
-}
-?>
-<div id="upiLinkDisplay1"><?php echo htmlspecialchars($link ?? ''); ?></div>
-<script>
-    function getFullUpiLink() {
-        const upiLink = "<?php echo isset($link) ? addslashes($link) : ''; ?>";
-        
-        document.getElementById('upiLinkDisplay').textContent = 
-            upiLink ? 'UPI Link: ' + upiLink : 'No UPI link found in URL';
-        
-        return upiLink;
-    }
-    getFullUpiLink();
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UPI Link Extractor</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        #result { margin: 20px 0; padding: 15px; border: 1px solid #ddd; background: #f9f9f9; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>UPI Link Extractor</h1>
+    <div id="result" class="hidden">
+        <h3>Extracted UPI Link:</h3>
+        <p id="upiLinkDisplay"></p>
+        <a id="openLink" href="#" target="_blank">Open UPI Link</a>
+    </div>
+    <div id="noLink" class="hidden">
+        <p>No UPI link found. Add ?upi=<encoded_link> to URL.</p>
+        <p>Example: ?upi=dXBpOi8vcGF5P3BhPXVzZXJAdXBp</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const encodedLink = params.get('upi') || params.get('url') || params.get('link');
+            
+            if (encodedLink) {
+                try {
+                    // Decode Base64
+                    const upiLink = atob(encodedLink);
+                    document.getElementById('upiLinkDisplay').textContent = upiLink;
+                    document.getElementById('openLink').href = upiLink;
+                    document.getElementById('result').classList.remove('hidden');
+                } catch (e) {
+                    // If Base64 decode fails, try using the raw value
+                    const upiLink = decodeURIComponent(encodedLink);
+                    document.getElementById('upiLinkDisplay').textContent = upiLink;
+                    document.getElementById('openLink').href = upiLink;
+                    document.getElementById('result').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('noLink').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
