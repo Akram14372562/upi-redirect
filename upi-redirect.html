@@ -9,7 +9,7 @@
         function getUpiLink() {
             const params = new URLSearchParams(window.location.search);
             const upiLink = params.get('upi') || params.get('url') || params.get('link');
-            #const 
+            // const 
             if (!upiLink) {
                 document.getElementById("error").textContent = "No UPI link provided! Please check the URL.";
                 return null;
