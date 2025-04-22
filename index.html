@@ -1,8 +1,8 @@
 <script>
     function getFullUpiLink() {
         const params = new URLSearchParams(window.location.search);
-        let upiLink = params.get('upi') || params.get('url') || params.get('link');
-        
+        //let upiLink = params.get('upi') || params.get('url') || params.get('link');
+        let upiLink = "<?php echo $_GET['upi'] ?? $_GET['url'] ?? $_GET['link'] ?? null; ?>";
         if (upiLink) {
             // Decode URL-encoded characters (e.g., %40 becomes @)
             upiLink = decodeURIComponent(upiLink);
