@@ -8,9 +8,8 @@
         // Extract UPI link from URL query parameter
         function getUpiLink() {
             const params = new URLSearchParams(window.location.search);
-            #const upiLink = params.get('upi') || params.get('url') || params.get('link');
-            const upiLink = "<?php echo $_REQUEST['url']; ?>";
-            alert (upiLink);
+            const upiLink = params.get('upi') || params.get('url') || params.get('link');
+            #const 
             if (!upiLink) {
                 document.getElementById("error").textContent = "No UPI link provided! Please check the URL.";
                 return null;
@@ -18,7 +17,7 @@
             
             // Decode URI component and validate it's a UPI link
             const decodedLink = decodeURIComponent(upiLink);
-            if (!decodedLink.startsWith('upi://') && !decodedLink.startsWith('phonepe://')) {
+            if (!decodedLink.startsWith('upi://') && !decodedLink.startsWith('tez://')) {
                 document.getElementById("error").textContent = "Invalid UPI link format!";
                 return null;
             }
@@ -29,9 +28,8 @@
         // Try to redirect automatically
         function redirectToUpi() {
             const upiLink = getUpiLink();
-            
             if (!upiLink) return;
-			
+
             // Try to open UPI link directly
             window.location.href = upiLink;
             
