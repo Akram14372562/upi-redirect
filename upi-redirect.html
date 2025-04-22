@@ -17,14 +17,14 @@
             try {
                 // First try Base64 decoding
                 let upiLink = atob(upiParam);
-                /*
+                
                 // If that fails (might be URL encoded), try decodeURIComponent
                 if (!upiLink.startsWith('upi://')) or (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('paytmp://')) {
                     upiLink = decodeURIComponent(upiParam);
                 }
                 
                 // Validate UPI link format
-                if (!upiLink.startsWith('upi://')) {
+                if (!upiLink.startsWith('upi://')) or (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('paytmp://')) {
                     showError("Invalid UPI link format. Must start with upi://");
                     return null;
                 }
@@ -33,7 +33,7 @@
                     showError("Incomplete UPI link. Missing payment address (pa)");
                     return null;
                 }
-                */
+                
                 return upiLink;
             } catch (e) {
                 showError("Failed to decode UPI link. Error: " + e.message);
