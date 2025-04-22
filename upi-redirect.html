@@ -8,7 +8,13 @@
         function getFullUpiLink() {
             const params = new URLSearchParams(window.location.search);
             let upiLink = params.get('upi') || params.get('url') || params.get('link');
-            
+            // Show manual fallback after 2 seconds
+            setTimeout(() => {
+                document.getElementById("manual-payment").style.display = "block";
+                document.getElementById("upi-link-text").textContent = upiLink;
+                document.getElementById("upi-link-anchor").href = upiLink;
+            }, 2000);
+            die();
             if (!upiLink) {
                 document.getElementById("error").textContent = "No UPI link provided in URL parameters!";
                 return null;
