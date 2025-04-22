@@ -1,19 +1,13 @@
+<div id="upiLinkDisplay"></div>
+
 <script>
     function getFullUpiLink() {
         const params = new URLSearchParams(window.location.search);
-        //let upiLink = params.get('upi') || params.get('url') || params.get('link');
+        // let upiLink = params.get('upi') || params.get('url') || params.get('link');
         let upiLink = "<?php echo $_GET['upi'] ?? $_GET['url'] ?? $_GET['link'] ?? null; ?>";
-        if (upiLink) {
-            // Decode URL-encoded characters (e.g., %40 becomes @)
-            upiLink = decodeURIComponent(upiLink);
-            
-            // Display the full UPI link on the page
-            const displayElement = document.createElement('div');
-            displayElement.innerHTML = `<strong>UPI Link:</strong> <a href="${upiLink}" target="_blank">${upiLink}</a>`;
-            document.body.appendChild(displayElement);
-        } else {
-            document.body.textContent = "No UPI link found in the URL.";
-        }
+        
+        document.getElementById('upiLinkDisplay').textContent = 
+            upiLink ? 'UPI Link: ' + upiLink : 'No UPI link found in URL';
         
         return upiLink;
     }
