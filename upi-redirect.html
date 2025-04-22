@@ -18,7 +18,7 @@
             upiLink = decodeURIComponent(upiLink);
             
             // Validate it's a UPI link
-            if (!upiLink.startsWith('phonepe://')) {
+            if (!upiLink.startsWith('phonepe://')) or (!upiLink.startsWith('upi://')){
                 document.getElementById("error").textContent = "Invalid UPI link format! Must start with upi://";
                 return null;
             }
